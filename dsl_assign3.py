@@ -17,10 +17,10 @@ def print_matrix(matrix):
 
 def add_matrix(matrix1,matrix2):
     # matching number of rows
-    if len(matrix1)!=len(matrix2):
+    if len(matrix1)!= len(matrix2):
         return "Number of rows are not equal "
     # matching number of columns
-    if len(matrix1[0])!=len(matrix2[0]):
+    if len(matrix1[0])!= len(matrix2[0]):
         return "Number of columns are not equal "
     
     print("ADDITION: ")
@@ -37,10 +37,10 @@ def add_matrix(matrix1,matrix2):
 
 def subtract_matrix(matrix1,matrix2):
     # matching number of rows
-    if len(matrix1)!=len(matrix2):
+    if len(matrix1)!= len(matrix2):
         return "Number of rows are not equal "
     # matching number of columns
-    if len(matrix1[0])!=len(matrix2[0]):
+    if len(matrix1[0])!= len(matrix2[0]):
         return "Number of columns are not equal "
     
     print("SUBTRACTION: ")
@@ -118,26 +118,73 @@ def check_upper_triangular(matrix):
 def find_saddle_point(matrix):
     m = len(matrix)
     n = len(matrix[0])
-    
+    saddle_points=[]
+    saddle_value = None
     for i in range(m):
         row_min = matrix[i][0]
-        index_row_min = 0
+        possible_saddle_points = []
         for j in range(n):
-            if matrix[i][j]<row_min:
+            if matrix[i][j]==row_min:
+                possible_saddle_points.append(j)
+            elif matrix[i][j]<row_min:
+                possible_saddle_points = [j]
                 row_min = matrix[i][j]
-                index_row_min = j
         
-        for j in range(m):
-            if matrix[j][index_row_min]>row_min:
-                break
+        if saddle_value != None and saddle_value!=row_min:
+            continue
+        for col in possible_saddle_points:
+            for j in range(m):
+                if matrix[j][col]>row_min:
+                    break
         
-        else:
-            return f"{(i+1,index_row_min+1)} is the saddle point"
+            else:
+                saddle_value = row_min
+                saddle_points.append((i,col))
     
-    return "No saddle point"
+    print("There are",len(saddle_points),"saddle points")
+    if len(saddle_points)>0:
+        for point in saddle_points:
+            print(point,end=" ")
 
 
-menu = """0. Exit
+def is_magic_square(matrix):
+    m = len(matrix)
+    n = len(matrix[0])
+    if m!=n:
+        print("Given matrix is not a square matrix ")
+        return False
+    magic_sum = 0
+    for i in range(n):
+        magic_sum += matrix[0][i]
+
+    # Checking rows and columns
+    diag1,diag2 = diagonal_sum(matrix)
+    if diag1!= magic_sum or diag2!=magic_sum:
+        print("diagonal sum do not match magic sum")
+        return False
+    for i in range(m):
+        row_sum=0
+        for j in range(n):
+            if matrix[i][j]<=0 or matrix[i][j]>m*m:
+                print("value:",matrix[i][j],"cannot be present")
+                return False
+            row_sum += matrix[i][j]
+        if row_sum!=magic_sum:
+            print("Sum of row",i+1,"is different")
+            return False
+    for i in range(n):
+        col_sum=0
+        for j in range(m):
+            col_sum += matrix[j][i]
+        if col_sum!=magic_sum:
+            print("Sum of column",i+1,"is different")
+            return False
+    
+    return True
+
+
+menu = """
+0. Exit
 1. Add
 2. Subtract
 3. Transpose
@@ -145,6 +192,7 @@ menu = """0. Exit
 5. Diagonal sum
 6. Check upper triangular
 7. Find saddle point
+8. Check magic square
 """
 while True:
     print(menu)
@@ -204,7 +252,11 @@ while True:
         print("Matrix: ")
         matrix1 = input_matrix()
         print_matrix(matrix1)
-        print(find_saddle_point(matrix1))
-
+        find_saddle_point(matrix1)
+    elif option==8:
+        print("Matrix: ")
+        matrix1 = input_matrix()
+        print_matrix(matrix1)
+        print(is_magic_square(matrix1))
     else:
         print("Invalid option: ")
