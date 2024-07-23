@@ -1,19 +1,29 @@
-from random import randint
-from time import time
+from timer import timer
 
-
-def linear_search(arr,n,key):
-    for i in range(n):
+@timer
+def linear_search(arr :list[int],n:int,key:int)->int:
+    i = 0
+    while i<n:
         if arr[i]==key:
             print("Number of comparisions",i+1)
             print(arr[i])
             return i
-        
+        i+=1
+
     print("Number of comparisions",n)    
     return -1
 
-
-def binary_search(arr,n,key):
+@timer
+def sentinel_search(arr :list[int],n:int,key:int)->int:
+    l = arr.copy()
+    l.append(key)
+    i=0
+    while l[i]!=key:
+        i+=1
+    return i if i<n else -1
+    
+@timer
+def binary_search(arr :list[int],n:int,key:int)->int:
     l = 0
     r = n-1
     comparisions = 0
@@ -30,56 +40,51 @@ def binary_search(arr,n,key):
     print("Number of comparisions",comparisions)
     return -1
 
-# Generates a random strictly increasing array
-def generate_random_array(n):
-    prev = 0
-    arr = []
-    for i in range(n):
-        add = randint(1,20)
-        arr.append(prev+add)
-        prev += add
-    
-    return arr
 
-# students = eval(input("Enter list of students: "))
-students = generate_random_array(10000)
+students = [
+3, 8, 14, 19, 22, 27, 33, 39, 42, 48,  
+52, 57, 61, 67, 72, 78, 84, 89, 95, 100,  
+105, 111, 116, 121, 127, 132, 138, 144, 150, 156,
+161, 167, 173, 179, 185, 190, 196, 202, 208, 214,  
+220, 226, 232, 238, 244, 250, 257, 263, 269, 275,  
+281, 287, 293, 299, 305, 311, 317, 323, 329, 336,  
+342, 349, 355, 362, 369, 376, 383, 390, 397, 404,  
+411, 418, 425, 432, 439, 446, 453, 460, 467, 474,  
+481, 488, 495, 502, 509, 516, 523, 530, 537, 544,  
+551, 558, 565, 572, 579, 586, 593, 600, 607, 614
+]
 print(students)
-key = int(input("Enter the value to search for: "))
-
 n = len(students)
+
 
 menu = """
 0. Exit
 1. Linear Search
 2. Binary Search
-3. Generate new array
-4. Change key"""
+3. Sentinel Search
+"""
 while True:
     print(menu)
     option = int(input("Choose an option: "))
     if option==0:
         break
-    elif option == 1:
-        t1 = time() 
-        index = linear_search(students,n,key)
-        t2 = time()
-        if index==-1:
-            print("Not found")
-        else:
-            print("Found at",index)
-        print("Time taken:",t2-t1,"ms")
-    elif option == 2:
-        t1 = time()
-        index = binary_search(students,n,key)
-        t2 = time()
-        if index==-1:
-            print("Not found")
-        else:
-            print("Found at",index)
-        print("Time taken:",t2-t1,"ms")
-    elif option == 3:
-        n = int(input("Size of required array: "))
-        students = generate_random_array(n)
-        print(students)
-    elif option == 4:
+    else:
         key = int(input("Enter the value to search for: "))
+    if option == 1:
+        index = linear_search(students,n,key)
+        if index==-1:
+            print("Not found")
+        else:
+            print("Found at",index)
+    elif option == 2:
+        index = binary_search(students,n,key)
+        if index==-1:
+            print("Not found")
+        else:
+            print("Found at",index)
+    elif option==3:
+        index = sentinel_search(students,n,key)
+        if index==-1:
+            print("Not found")
+        else:
+            print("Found at",index)
