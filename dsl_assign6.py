@@ -15,6 +15,19 @@ def bubble_sort(arr):
             break
     return iterations
 
+@timer
+def selection_sort(arr):
+    n = len(arr)
+    iterations = 0
+    for i in range(0,n-1):
+        x = i
+        for j in range(i+1,n):
+            if (arr[j]<arr[x]):
+                x = j
+            iterations += 1
+        arr[x],arr[i] = arr[i],arr[x]
+    return iterations
+
 arr1 =  [487, 356, 942, 712, 119, 875, 248, 641, 999, 304, 573,
         218, 890, 405, 131, 785, 552, 246, 689, 379, 254, 920,
         438, 168, 507, 396, 778, 264, 191, 719, 634, 822, 103,
@@ -29,6 +42,11 @@ print(arr1)
 print(f"No of iterations used:",count)
 
 arr2 = [1,2,3,4,5,6,7,8,20,11,12,13,14,16]
-count = bubble_sort(arr2)
+count = selection_sort(arr2)
 print(arr2)
+print("No of iterations used:",count)
+
+arr3 = [1,2,3,4,5,6,7,8,20,11,12,13,14,16]
+count = bubble_sort(arr3)
+print(arr3)
 print("No of iterations used:",count)
