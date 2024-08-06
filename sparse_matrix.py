@@ -12,33 +12,34 @@ def sparse_mat():
     sp[0][2] = count
     return sp
 
+
 def fast_transpose(sparse):
     # Counting frequencies
-    freq = dict()
+    total_col = sparse[0][1]
+    freq = [0]*total_col
     for entry in sparse[1:]:
         row,col,value = entry
-        if col in freq:
-            freq[col]+=1
-        else:
-            freq[col]=1
-
-    freq = dict(sorted(freq.items()))
+        freq[col]+=1
     
-    indices = dict()
-    x = 0
-    for col,frequency in freq.items():
-        indices[col] = x
-        x+=frequency
+    # Setting start indices
+    indices=[0]*total_col
+    x = 1
+    for i in range(total_col):
+        indices[i] = x
+        x+=freq[i]
 
     transpose = sparse.copy()
     row,col,count = sparse[0]
     transpose[0] = [col,row,count]
 
+    # scanning the sparse matrix to get its transpose
     for entry in sparse[1:]:
         row,col,value = entry
-        indices[col] += 1
         index = indices[col]
         transpose[index] = [col,row,value]
+        # after putting a value at index = indices[col], increment that index by 1
+        # the next value for that column will be placed at the incremented index
+        indices[col] += 1
 
     return transpose
 
@@ -98,16 +99,17 @@ def add(sp1,sp2):
         sp3[0][2]+=1
         c2+=1
 
-    
     return sp3
 
 print("Enter matrix 1: ")
 sp1 = sparse_mat()
 print(sp1)
-print(simple_transpose(sp1))
-print(fast_transpose(sp1))
-# print("Enter matrix 2: ")
-# sp2 = sparse_mat()
-# print(sp2)
+print("Simple Transpose:",simple_transpose(sp1))
+print("Fast transpose:", fast_transpose(sp1))
+print("Enter matrix 2: ")
+sp2 = sparse_mat()
 
-# print(add(sp1,sp2))
+print(sp1)
+print(sp2)
+
+print(add(sp1,sp2))
