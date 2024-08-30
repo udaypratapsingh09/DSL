@@ -1,7 +1,7 @@
 from timer import timer
 
 @timer
-def linear_search(arr :list[int],n:int,key:int)->int:
+def linear_search(arr,n,key):
     i = 0
     while i<n:
         if arr[i]==key:
@@ -14,7 +14,7 @@ def linear_search(arr :list[int],n:int,key:int)->int:
     return -1
 
 @timer
-def sentinel_search(arr :list[int],n:int,key:int)->int:
+def sentinel_search(arr,n,key):
     l = arr.copy()
     l.append(key)
     i=0
@@ -23,7 +23,7 @@ def sentinel_search(arr :list[int],n:int,key:int)->int:
     return i if i<n else -1
     
 @timer
-def binary_search(arr :list[int],n:int,key:int)->int:
+def binary_search(arr,n,key):
     l = 0
     r = n-1
     comparisions = 0
